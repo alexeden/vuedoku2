@@ -3,7 +3,7 @@ import { Coordinates } from './types';
 export class Utils {
   static coordsFromIndex(index = 0): Coordinates {
     const col = index % 9;
-    const row = (index - (index % 9)) % 9;
+    const row = Math.floor(index / 9);
 
     return {
       row,
@@ -14,6 +14,9 @@ export class Utils {
   }
 
   static coordsFromRowCol(row = 0, col = 0): Coordinates {
+    row = (row + 9) % 9;
+    col = (col + 9) % 9;
+
     return {
       row,
       col,
