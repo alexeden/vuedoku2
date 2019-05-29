@@ -5,16 +5,16 @@ Vue.use(Vuex);
 
 export interface VuedokuState {
   cursor: {
-    x: number;
-    y: number;
+    row: number;
+    col: number;
   }
 }
 
 export default new Vuex.Store<VuedokuState>({
   state: {
     cursor: {
-      x: 0,
-      y: 0,
+      row: 0,
+      col: 0,
     },
   },
   mutations: {
