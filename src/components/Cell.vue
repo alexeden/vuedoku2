@@ -52,7 +52,6 @@ export default Vue.extend({
 
 
 <style scoped lang="scss">
-$green: #76FF03;
 $cell-error-color: #E53935;
 $cell-font-size: 2rem;
 $cell-font-color: #ffffff;
@@ -85,6 +84,7 @@ $cell-selected-font-color: rgba(0, 0, 0, .9);
 
 .locked {
   font-weight: 300;
+  font-size: 1.6rem;
 }
 
 .locked.selected {
