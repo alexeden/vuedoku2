@@ -2,6 +2,10 @@
   <div class="board-grid">
     <div class="row-overlay" :style="rowOverlayStyles"></div>
     <div class="col-overlay" :style="colOverlayStyles"></div>
+    <div class="col-line col-line--1"></div>
+    <div class="col-line col-line--2"></div>
+    <div class="row-line row-line--1"></div>
+    <div class="row-line row-line--2"></div>
     <cell
       v-for="(cell, i) in cells"
       @click="setCursorByIndex(i)"
@@ -42,17 +46,56 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions({
+      moveCursor: 'moveCursor',
       setCursorByIndex: 'setCursorByIndex',
+      setSelectedCellValue: 'setSelectedCellValue',
     }),
+    handleKeyDown(e) {
+      if (e.metaKey) return;
+      e.preventDefault();
+
+      switch (e.keyCode) {
+        case 37: // left arrow
+          this.moveCursor({ row: 0, col: -1 });
+          break;
+        case 38: // up arrow
+          this.moveCursor({ row: -1, col: 0 });
+          break;
+        case 39: // right arrow
+          this.moveCursor({ row: 0, col: 1 });
+          break;
+        case 40: // down arrow
+          this.moveCursor({ row: 1, col: 0 });
+          break;
+        case 49: // 1
+        case 50: // 2
+        case 51: // 3
+        case 52: // 4
+        case 53: // 5
+        case 54: // 6
+        case 55: // 7
+        case 56: // 8
+        case 57: // 9
+          this.setSelectedCellValue(+e.key);
+          break;
+        case 8: // backspace
+        case 46: // delete
+          this.setSelectedCellValue(0);
+          break;
+        default: break;
+      }
+    },
   },
   mounted() {
-    window.board = this;
+    this.$root.$el.parentElement.addEventListener('keydown', this.handleKeyDown.bind(this));
   },
 });
 </script>
 
 <style scoped lang="scss">
 $cell-size: 80px;
+$line-thickness: 1px;
+$line-color: white;
 
 .board-grid {
   display: grid;
@@ -69,7 +112,36 @@ $cell-size: 80px;
     "a a a b b b a a a"
     "a a a b b b a a a"
     "a a a b b b a a a";
+
+
 }
+.col-line {
+  position: absolute;
+  height: 9 * $cell-size;
+  width: $line-thickness;
+  background: $line-color;
+  grid-row: span 9;
+  &--1 {
+    grid-column: col-end 3 / col-start 4;
+  }
+  &--2 {
+    grid-column: col-end 6 / col-start 7;
+  }
+}
+.row-line {
+  position: absolute;
+  width: 9 * $cell-size;
+  height: $line-thickness;
+  background: $line-color;
+  grid-column: span 9;
+  &--1 {
+    grid-row: row-end 3 / row-start 4;
+  }
+  &--2 {
+    grid-row: row-end 6 / row-start 7;
+  }
+}
+
 
 .row-overlay, .col-overlay {
   position: absolute;

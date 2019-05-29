@@ -22,7 +22,7 @@ export class Utils {
     };
   }
 
-  static coordsFromRowCol(row = 0, col = 0): Coordinates {
+  static coordsFromRowCol({ row = 0, col = 0 }): Coordinates {
     row = (row + 9) % 9;
     col = (col + 9) % 9;
 

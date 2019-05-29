@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { VuedokuState, Coordinates } from './lib/types';
+import { VuedokuState, Coordinates, Cell } from './lib/types';
 import { Utils } from './lib/utils';
 
 Vue.use<typeof Vuex>(Vuex);
@@ -33,23 +33,42 @@ export default new Vuex.Store<VuedokuState>({
     };
   },
   getters: {
-    cellByIndex: state => (index: number) => state.cells[index],
+    selectedCell: state => state.cells[state.cursor.index],
+
+    impossibleValuesByCell: ({ cells }) => (cell: Cell) =>
+      Array.from(new Set([
+        ...cells
+          /* Ignore the passed-in cell */
+          .filter(c =>
+            typeof c.value === 'number'
+              && c.index !== cell.index
+              && (c.col === cell.col || c.row === cell.row || c.nonet === cell.nonet),
+          )
+          .map(c => c.value as number),
+      ])),
   },
   actions: {
     moveCursor: ({ commit, state }, { row, col }) => {
-      // state.cursor = {
-      //   row: state.cursor.row + row,
-      //   col: state.cursor.col + col,
-      // };
+      commit('setCursorCoords', Utils.coordsFromRowCol({
+        row: state.cursor.row + row,
+        col: state.cursor.col + col,
+      }));
     },
+
+    setSelectedCellValue({ state, commit, getters }, value: number) {
+      if (value < 0 || value > 9 || getters.selectedCell.locked) return;
+      commit('setCellValue', { cell: getters.selectedCell, value });
+    },
+
     setCursorByIndex: ({ commit }, index: number) => {
-      console.log('setting by index', index);
       commit('setCursorCoords', Utils.coordsFromIndex(index));
     },
   },
   mutations: {
+    setCellValue(state, { cell, value }) {
+      cell.value = value;
+    },
     setCursorCoords: (state, coords: Coordinates) => {
-      console.log('setting coords', coords);
       state.cursor = { ...coords };
     },
   },

@@ -13,6 +13,9 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'import/prefer-default-export': 'off',
     'no-param-reassign': 'off',
+    'prefer-destructuring': 'off',
+    'function-paren-newline': 'off',
+    'implicit-arrow-linebreak': 'off',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
