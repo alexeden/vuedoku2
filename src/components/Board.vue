@@ -1,31 +1,6 @@
 <template>
   <div class="board-grid">
-    <div class="overlay"></div>
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
-    <cell />
+    <cell v-for="(cell, i) in cells" :key="i" />
   </div>
 </template>
 
@@ -38,6 +13,11 @@ export default Vue.extend({
   name: 'board',
   components: {
     Cell,
+  },
+  computed: {
+    cells() {
+      return Array.from(Array(81)).map((_, i) => i);
+    },
   },
 });
 </script>

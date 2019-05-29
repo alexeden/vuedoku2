@@ -17,10 +17,10 @@ export default new Vuex.Store<VuedokuState>({
       col: 0,
     },
   },
-  mutations: {
+  actions: {
 
   },
-  actions: {
+  mutations: {
 
   },
 });
