@@ -21,4 +21,10 @@ export class Utils {
       nonet: (col - (col % 3)) / 3 + (row - (row % 3)),
     };
   }
+
+  static chunkify<T>(size: number, list: T[]): T[][] {
+    return list.length > 0
+      ? [list.slice(0, size), ...Utils.chunkify(size, list.slice(size))]
+      : [list];
+  }
 }

@@ -1,12 +1,12 @@
 <template>
-  <div class="cell">
+  <div class="cell" @click="setCursorByIndex(index)">
     I am cell {{ index }}
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default Vue.extend({
   name: 'cell',
@@ -22,6 +22,9 @@ export default Vue.extend({
     }),
   },
   methods: {
+    ...mapActions({
+      setCursorByIndex: 'setCursorByIndex',
+    }),
     ...mapMutations({
 
     }),

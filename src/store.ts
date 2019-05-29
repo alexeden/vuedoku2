@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { VuedokuState } from './lib/types';
+import { VuedokuState, Coordinates } from './lib/types';
+import { Utils } from './lib/utils';
 
 Vue.use<typeof Vuex>(Vuex);
 
@@ -10,6 +11,8 @@ export default new Vuex.Store<VuedokuState>({
     cursor: {
       row: 0,
       col: 0,
+      nonet: 0,
+      index: 0,
     },
   },
   getters: {
@@ -17,15 +20,20 @@ export default new Vuex.Store<VuedokuState>({
   },
   actions: {
     moveCursor: ({ commit, state }, { row, col }) => {
-      state.cursor = {
-        row: state.cursor.row + row,
-        col: state.cursor.col + col,
-      };
+      // state.cursor = {
+      //   row: state.cursor.row + row,
+      //   col: state.cursor.col + col,
+      // };
+    },
+    setCursorByIndex: ({ commit }, index: number) => {
+      console.log('setting by index', index);
+      commit('setCursorCoords', Utils.coordsFromIndex(index));
     },
   },
   mutations: {
-    setCursor: (state, { row, col }) => {
-      state.cursor = { row, col };
+    setCursorCoords: (state, coords: Coordinates) => {
+      console.log('setting coords', coords);
+      state.cursor = { ...coords };
     },
   },
 });
