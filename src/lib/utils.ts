@@ -1,6 +1,15 @@
-import { Coordinates } from './types';
+import { Coordinates, Cell } from './types';
 
 export class Utils {
+  static createCells(values: number[]): Cell[] {
+    return values.map((value, index) => ({
+      index,
+      value,
+      locked: value > 0,
+      ...Utils.coordsFromIndex(index),
+    }));
+  }
+
   static coordsFromIndex(index = 0): Coordinates {
     const col = index % 9;
     const row = Math.floor(index / 9);
@@ -23,11 +32,5 @@ export class Utils {
       index: row * 9 + col,
       nonet: (col - (col % 3)) / 3 + (row - (row % 3)),
     };
-  }
-
-  static chunkify<T>(size: number, list: T[]): T[][] {
-    return list.length > 0
-      ? [list.slice(0, size), ...Utils.chunkify(size, list.slice(size))]
-      : [list];
   }
 }

@@ -1,8 +1,9 @@
 <template>
-  <div class="cell"
+  <div
+    class="cell"
     :class="cssClasses"
-    @click="setCursorByIndex(index)">
-    {{ index }}
+    @click="handleClick()">
+    {{ cell.value > 0 ? cell.value : '' }}
   </div>
 </template>
 
@@ -40,34 +41,30 @@ $cell-selected-font-color: rgba(0, 0, 0, .6);
 }
 
 .selected {
-    background-color: $cell-selected-background-color;
-    color: $cell-selected-font-color;
-    font-weight: $cell-selected-font-weight !important;
-
+  background-color: $cell-selected-background-color;
+  color: $cell-selected-font-color;
+  font-weight: $cell-selected-font-weight !important;
 }
 </style>
 
 <script>
 import Vue from 'vue';
-import { mapGetters, mapMutations, mapActions, mapState } from 'vuex';
 
 export default Vue.extend({
   name: 'cell',
   props: {
-    index: {
-      type: Number,
+    cell: {
+      type: Object,
+      required: true,
+    },
+    cursor: {
+      type: Object,
       required: true,
     },
   },
   computed: {
-    ...mapGetters({
-
-    }),
-    ...mapState({
-      cursor: state => state.cursor,
-    }),
     isSelected() {
-      return this.cursor.index === this.index;
+      return this.cursor.index === this.cell.index;
     },
     cssClasses() {
       return {
@@ -76,12 +73,9 @@ export default Vue.extend({
     },
   },
   methods: {
-    ...mapActions({
-      setCursorByIndex: 'setCursorByIndex',
-    }),
-    ...mapMutations({
-
-    }),
+    handleClick() {
+      this.$emit('click', this.cell);
+    },
   },
 });
 </script>

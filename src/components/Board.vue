@@ -1,10 +1,13 @@
 <template>
   <div class="board-grid">
-    <!-- <div class="row-overlay" :style="rowOverlayStyles"></div> -->
+    <div class="row-overlay" :style="rowOverlayStyles"></div>
+    <div class="col-overlay" :style="colOverlayStyles"></div>
     <cell
       v-for="(cell, i) in cells"
+      @click="setCursorByIndex(i)"
+      :cell="cell"
+      :cursor="cursor"
       :key="i"
-      :index="i"
     />
   </div>
 </template>
@@ -24,9 +27,12 @@ export default Vue.extend({
   computed: {
     ...mapState({
       cursor: state => state.cursor,
+      cells: state => state.cells,
     }),
-    cells() {
-      return Array.from(Array(81)).map((_, i) => i);
+    colOverlayStyles() {
+      return {
+        gridColumn: `col-start ${this.cursor.col + 1}`,
+      };
     },
     rowOverlayStyles() {
       return {
@@ -34,10 +40,13 @@ export default Vue.extend({
       };
     },
   },
+  methods: {
+    ...mapActions({
+      setCursorByIndex: 'setCursorByIndex',
+    }),
+  },
   mounted() {
     window.board = this;
-  },
-  methods: {
   },
 });
 </script>
@@ -62,12 +71,18 @@ $cell-size: 80px;
     "a a a b b b a a a";
 }
 
-.row-overlay {
+.row-overlay, .col-overlay {
   position: absolute;
-  grid-column: span 9;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.row-overlay {
   height: $cell-size;
-  background-color: blue;
   width: 9 * $cell-size;
-  grid-row: row-start 2;
+  grid-column: span 9;
+}
+.col-overlay {
+  height: 9 * $cell-size;
+  width: $cell-size;
+  grid-row: span 9;
 }
 </style>

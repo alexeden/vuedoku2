@@ -11,5 +11,6 @@ export type Cell = Coordinates & {
 }
 
 export interface VuedokuState {
+  cells: Cell[];
   cursor: Coordinates;
 }
