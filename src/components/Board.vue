@@ -10,7 +10,6 @@
       v-for="(cell, i) in cells"
       @click="setCursorByIndex(i)"
       :cell="cell"
-      :cursor="cursor"
       :key="i"
     />
   </div>
@@ -18,7 +17,7 @@
 
 <script>
 import Vue from 'vue';
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import Cell from './Cell.vue'; // @ is an alias to /src
 import { VuedokuState } from '../lib/types';
 
@@ -32,6 +31,9 @@ export default Vue.extend({
     ...mapState({
       cursor: state => state.cursor,
       cells: state => state.cells,
+    }),
+    ...mapGetters({
+      selectedCell: 'selectedCell',
     }),
     colOverlayStyles() {
       return {
@@ -88,6 +90,7 @@ export default Vue.extend({
   },
   mounted() {
     this.$root.$el.parentElement.addEventListener('keydown', this.handleKeyDown.bind(this));
+    window.board = this;
   },
 });
 </script>
@@ -112,9 +115,8 @@ $line-color: white;
     "a a a b b b a a a"
     "a a a b b b a a a"
     "a a a b b b a a a";
-
-
 }
+
 .col-line {
   position: absolute;
   height: 9 * $cell-size;

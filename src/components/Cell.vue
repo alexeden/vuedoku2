@@ -9,7 +9,7 @@
 
 <script>
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default Vue.extend({
   name: 'cell',
@@ -18,12 +18,11 @@ export default Vue.extend({
       type: Object,
       required: true,
     },
-    cursor: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
+    ...mapState({
+      cursor: state => state.cursor,
+    }),
     isSelected() {
       return this.cursor.index === this.cell.index;
     },
